@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -68,35 +69,47 @@ namespace WindowsFormsApp5
         Player monsterl;
         private void button4_Click(object sender, EventArgs e)
         {
-            int dmg1 = mainHero.DoAttack();
-            int dmg2 = monsterl.DoAttack();
+            int dmg1 = mainHero.CountDamage();
+            int dmg2 = monsterl.CountDamage();
             //damage to textbox
-            mainHero.HealPoints -= dmg2;
-            monsterl.HealPoints -= dmg1;
+            mainHero.dealdamage(dmg2);
+            monsterl.dealdamage(dmg1);
              
-            richTextBox1.Text += " hero attack monster " + dmg1.ToString();
-            richTextBox1.Text += " monster attack hero " + dmg2.ToString();
-            if (mainHero.isAlive() == false)
+            richTextBox1.Text += "\n hero attack monster " + dmg1.ToString();
+            richTextBox1.Text += "\n monster attack hero " + dmg2.ToString();
+            if (mainHero.isAlive() == false && monsterl.isAlive() == false)
             {
-                MessageBox.Show("player lose");
-                init();
+                MessageBox.Show("TIE play");
             }
-            if (monsterl.isAlive() == false)
+            else
             {
-                MessageBox.Show("WIN");
-                init();
+                if (mainHero.isAlive() == false)
+                {
+                    MessageBox.Show("player lose");
+
+                }
+                if (monsterl.isAlive() == false)
+                {
+                    MessageBox.Show("WIN");
+
+                }
             }
         }
         void init()
         {
             mainHero = new Player();
-            Random end = new Random();
-            mainHero.HealPoints = end.Next(15, 20);
-
+            //mainHero.GenerateName();
+            //mainHero.health();
+            //sleep 100ms to initiate new random
+            Thread.Sleep(100);
             monsterl = new Player();
-            monsterl.HealPoints = end.Next(15, 20);
+            //monsterl.GenerateName();
+            //monsterl.health();
             //healpoint to textbox
-            monsterl.name = "ыртышил";
+            richTextBox1.Text += "\n hero name="+mainHero.name+" health " + mainHero.HealPoints.ToString();
+            richTextBox1.Text += "\n monster =" + monsterl.name + "health " + monsterl.HealPoints.ToString();
+
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -107,6 +120,11 @@ namespace WindowsFormsApp5
         {
 
              
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            init();
         }
     }
 }

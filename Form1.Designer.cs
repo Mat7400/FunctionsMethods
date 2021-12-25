@@ -38,6 +38,7 @@ namespace WindowsFormsApp5
             this.button4 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -119,11 +120,22 @@ namespace WindowsFormsApp5
             this.label1.TabIndex = 7;
             this.label1.Text = "Log";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(118, 818);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(195, 44);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "Init";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1029, 890);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button4);
@@ -152,6 +164,7 @@ namespace WindowsFormsApp5
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button5;
     }
 }
 
