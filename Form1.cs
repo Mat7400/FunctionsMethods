@@ -70,6 +70,7 @@ namespace WindowsFormsApp5
         private void button4_Click(object sender, EventArgs e)
         {
             int dmg1 = mainHero.CountDamage();
+            Thread.Sleep(100);
             int dmg2 = monsterl.CountDamage();
             //damage to textbox
             mainHero.dealdamage(dmg2);
@@ -79,24 +80,32 @@ namespace WindowsFormsApp5
             richTextBox1.Text += "\n monster attack hero " + dmg2.ToString();
             if (mainHero.isAlive() == false && monsterl.isAlive() == false)
             {
+                //listbox - массив dealedDamage вывести
+
                 MessageBox.Show("TIE play");
+                MessageBox.Show(mainHero.dealedDamagePrint() );
             }
             else
             {
                 if (mainHero.isAlive() == false)
                 {
+
                     MessageBox.Show("player lose");
+                    MessageBox.Show(mainHero.dealedDamagePrint());
 
                 }
                 if (monsterl.isAlive() == false)
                 {
+
                     MessageBox.Show("WIN");
+                    MessageBox.Show(mainHero.dealedDamagePrint());
 
                 }
             }
         }
         void init()
         {
+            richTextBox1.Text = "";
             mainHero = new Player();
             //mainHero.GenerateName();
             //mainHero.health();
@@ -125,6 +134,7 @@ namespace WindowsFormsApp5
         private void button5_Click(object sender, EventArgs e)
         {
             init();
+            
         }
     }
 }

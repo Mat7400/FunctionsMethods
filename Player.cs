@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
 
 namespace WindowsFormsApp5
 {
@@ -10,10 +12,14 @@ namespace WindowsFormsApp5
     {
         public Player()
         {
+            Random rondom = new Random();
+            minDamage = rondom.Next(1,5);
+            maxDamage = rondom.Next(8, 12);
             //constructor
             GenerateName();
             health();
             //
+            dealedDamage.Clear();
         }
         public int Exp = 0;
         public int HealPoints = 15;
@@ -24,8 +30,8 @@ namespace WindowsFormsApp5
         {
             return "Name="+name+" Exp=" + Exp.ToString() + " Heal=" + HealPoints + " Atack=" + Atack + " Super Atack=" + SuperAtack;
         }
-        public int maxDamage = 5;
-        public int minDamage = 2;
+        public int maxDamage = 10;
+        public int minDamage = 1;
         public int CountDamage()
         {
             Random rnd = new Random();
@@ -36,9 +42,17 @@ namespace WindowsFormsApp5
             Random rndm = new Random();
             HealPoints = rndm.Next(15, 25);
         }
+        //dealed damage array (list)
+        public List<int> dealedDamage = new List<int>();
         public void dealdamage(int damage)
         {
             HealPoints = HealPoints - damage;
+            //store damage in array
+            //fixed array
+            //string[] lkka = new string[10];
+            //dynamic array
+            //List<int> lst = new List<int>();
+            dealedDamage.Add(damage);
         }
         public bool isAlive()
         {
@@ -55,11 +69,46 @@ namespace WindowsFormsApp5
             name = "";
             for (int i = 0; i < length; i++)
             {
-                int numberCharacter = rnd.Next(1, 65536);
+                //more than 55000-exception
+                int numberCharacter = rnd.Next(1, 55000);
                 //how to get character by number
-                string c = Char.ConvertFromUtf32(numberCharacter);
-                name += c;
+                //exception catch
+                try
+                {
+                    string c = Char.ConvertFromUtf32(numberCharacter);
+                    name += c;
+                }
+                catch (Exception ex)
+                {
+                    //ex - data from exception
+                    //MessageBox.Show(ex.Message+" source="+ ex.Source+" stack="+ex.StackTrace );
+                    //log to file
+                    //using - синтаксический сахар чтобы не писать много строк про открытие и закрытие файла
+                    //по сути open close для файла вызываются неявно
+                    using (StreamWriter sw = File.AppendText("log.txt"))
+                    {
+                        sw.WriteLine(ex.Message + " source=" + ex.Source + " stack=" + ex.StackTrace+
+                            " numberCH="+ numberCharacter);
+                    }
+                }
             }
+        }
+
+        internal string dealedDamagePrint()
+        {
+            string result="";
+            //for(int counter = 0;counter < dealedDamage.Count; counter++)
+            //{
+
+            //}
+            //Foreach cycle
+            foreach (int item in dealedDamage)
+            {
+                result += (item.ToString());
+                result += " ";
+            }
+
+            return result;
         }
     }
 }
