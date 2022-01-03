@@ -26,6 +26,12 @@ namespace WindowsFormsApp5
         public int Atack = 3;
         public int SuperAtack = 16;
         public string name = "knight";
+        //
+        // Этот делегат работает в сочетании с событиями Player.
+        // EventArgs - специальный классс от микрософт для работы с событиями
+        public delegate void PlayerHandler(string msg, EventArgs args);
+        // Playerможет отправлять следующие события:
+        public event PlayerHandler DamagedEvent;
         public override string ToString()
         {
             return "Name="+name+" Exp=" + Exp.ToString() + " Heal=" + HealPoints + " Atack=" + Atack + " Super Atack=" + SuperAtack;
@@ -43,6 +49,8 @@ namespace WindowsFormsApp5
             HealPoints = rndm.Next(15, 25);
         }
         //dealed damage array (list)
+        //DZ
+        //03.01.2021 другие коллекции - очередь Queue, стек Stack и Словарь (dictonary)
         public List<int> dealedDamage = new List<int>();
         public void dealdamage(int damage)
         {
@@ -53,6 +61,12 @@ namespace WindowsFormsApp5
             //dynamic array
             //List<int> lst = new List<int>();
             dealedDamage.Add(damage);
+            //trigger event
+            //проверка на нулл чтобы понять есть ли подписчики события
+            if (DamagedEvent!=null)
+                DamagedEvent("damaged =" + damage.ToString(), new EventArgs() );
+            //2 способ - ?.
+            //DamagedEvent?.Invoke("second way");
         }
         public bool isAlive()
         {

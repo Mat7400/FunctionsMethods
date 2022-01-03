@@ -117,8 +117,15 @@ namespace WindowsFormsApp5
             //healpoint to textbox
             richTextBox1.Text += "\n hero name="+mainHero.name+" health " + mainHero.HealPoints.ToString();
             richTextBox1.Text += "\n monster =" + monsterl.name + "health " + monsterl.HealPoints.ToString();
-
+            //subscribe to event
+            mainHero.DamagedEvent += EventHandler;
             
+        }
+        //event handler (обработчик)
+        public void EventHandler(string message, EventArgs e)
+        {
+
+            MessageBox.Show("event fired, message="+message+" args="+e.ToString());
         }
         private void Form1_Load(object sender, EventArgs e)
         {
