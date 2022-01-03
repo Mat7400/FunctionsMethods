@@ -51,6 +51,7 @@ namespace WindowsFormsApp5
         //dealed damage array (list)
         //DZ
         //03.01.2021 другие коллекции - очередь Queue, стек Stack и Словарь (dictonary)
+        //можно например хранить историю хилпоинтов
         public List<int> dealedDamage = new List<int>();
         public void dealdamage(int damage)
         {
@@ -62,6 +63,7 @@ namespace WindowsFormsApp5
             //List<int> lst = new List<int>();
             dealedDamage.Add(damage);
             //trigger event
+            //событие запускается (триггерится) и все подписчики получает уведомление
             //проверка на нулл чтобы понять есть ли подписчики события
             if (DamagedEvent!=null)
                 DamagedEvent("damaged =" + damage.ToString(), new EventArgs() );

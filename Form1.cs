@@ -118,10 +118,12 @@ namespace WindowsFormsApp5
             richTextBox1.Text += "\n hero name="+mainHero.name+" health " + mainHero.HealPoints.ToString();
             richTextBox1.Text += "\n monster =" + monsterl.name + "health " + monsterl.HealPoints.ToString();
             //subscribe to event
+            //событие DamagedEvent - подписка в функции формы EventHandler
+            //Как только происходит событие - вызывается эта функция
             mainHero.DamagedEvent += EventHandler;
             
         }
-        //event handler (обработчик)
+        //event handler (обработчик события)
         public void EventHandler(string message, EventArgs e)
         {
 
