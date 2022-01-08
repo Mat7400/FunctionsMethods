@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Npgsql;
 namespace WindowsFormsApp5
 {
     public partial class Form1 : Form
@@ -145,5 +145,21 @@ namespace WindowsFormsApp5
             init();
             
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //sql connect
+            //port 5432 - postgresql 
+            //localhost - 127.0.0.1
+            string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =***; " +
+                "Password = ***; ";
+            Npgsql.NpgsqlConnection conn = new NpgsqlConnection(connect);
+            conn.Open();
+            string cmdtext = "SELECT table_name  FROM information_schema.tables WHERE table_schema = 'public'   AND table_type = 'BASE TABLE'; ";
+            NpgsqlCommand comm = new NpgsqlCommand(cmdtext, conn);
+            var res = comm.ExecuteReader();
+            conn.Close();
+        }
+
     }
 }
