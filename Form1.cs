@@ -150,7 +150,7 @@ namespace WindowsFormsApp5
         {
             //sql connect
             //port 5432 - postgresql 
-            //localhost - 127.0.0.1
+            //localhost - 
             string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =***; " +
                 "Password = ***; ";
             Npgsql.NpgsqlConnection conn = new NpgsqlConnection(connect);
