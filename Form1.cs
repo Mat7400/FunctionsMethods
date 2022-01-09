@@ -151,13 +151,24 @@ namespace WindowsFormsApp5
             //sql connect
             //port 5432 - postgresql 
             //localhost - 
-            string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =***; " +
-                "Password = ***; ";
+            string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =postgres; " +
+                "Password = "+textBoxPass.Text+"; ";
             Npgsql.NpgsqlConnection conn = new NpgsqlConnection(connect);
             conn.Open();
             string cmdtext = "SELECT table_name  FROM information_schema.tables WHERE table_schema = 'public'   AND table_type = 'BASE TABLE'; ";
             NpgsqlCommand comm = new NpgsqlCommand(cmdtext, conn);
             var res = comm.ExecuteReader();
+            //save player to base
+            //1 - create table manually
+            //2 - use npgsql EntityFramework
+            using (var context = new PlayerContext() )
+            {
+                
+                var result = context.Players.Add(mainHero);
+                context.Players.Add(monsterl);
+                context.SaveChanges();
+                //Console.WriteLine($"We have {cars.Length} car(s).");
+            }
             conn.Close();
         }
 

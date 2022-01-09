@@ -5,11 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace WindowsFormsApp5
 {
-    class Player
+    public class PlayerContext : DbContext
     {
+        public PlayerContext() : base(nameOrConnectionString: "Default") { }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("public");
+            base.OnModelCreating(modelBuilder);
+        }
+
+
+        
+
+        public DbSet<Player> Players { get ; set ; }
+    }
+    [Table("playertable")]
+    public class Player : DbContext
+    {
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDefaultSchema("public");
+            base.OnModelCreating(modelBuilder);
+        }
         public Player()
         {
             Random rondom = new Random();
@@ -22,10 +46,18 @@ namespace WindowsFormsApp5
             dealedDamage.Clear();
         }
         public int Exp = 0;
+       
+        [Column("HealPoints")]
         public int HealPoints = 15;
+        [Column("Atack")]
         public int Atack = 3;
+        
         public int SuperAtack = 16;
-        public string name = "knight";
+       
+        [Column("name")]
+        public string name = "knight" ;
+        [Key]
+        public int id { get; set; }
         //
         // Этот делегат работает в сочетании с событиями Player.
         // EventArgs - специальный классс от микрософт для работы с событиями
@@ -53,6 +85,9 @@ namespace WindowsFormsApp5
         //03.01.2021 другие коллекции - очередь Queue, стек Stack и Словарь (dictonary)
         //можно например хранить историю хилпоинтов
         public List<int> dealedDamage = new List<int>();
+        //очередь - первый вошел первый ушел
+        //например список найденных файлов
+        public Queue<int> dd2 = new Queue<int>();
         public void dealdamage(int damage)
         {
             HealPoints = HealPoints - damage;
@@ -62,6 +97,11 @@ namespace WindowsFormsApp5
             //dynamic array
             //List<int> lst = new List<int>();
             dealedDamage.Add(damage);
+            
+            dd2.Enqueue(damage);
+            //FIFO
+            dd2.Dequeue();
+
             //trigger event
             //событие запускается (триггерится) и все подписчики получает уведомление
             //проверка на нулл чтобы понять есть ли подписчики события
