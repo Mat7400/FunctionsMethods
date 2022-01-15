@@ -83,6 +83,7 @@ namespace WindowsFormsApp5
                 //listbox - массив dealedDamage вывести
 
                 MessageBox.Show("TIE play");
+                dealdamageSaveToDb(mainHero);
                 MessageBox.Show(mainHero.dealedDamagePrint() );
             }
             else
@@ -91,6 +92,7 @@ namespace WindowsFormsApp5
                 {
 
                     MessageBox.Show("player lose");
+                    dealdamageSaveToDb(mainHero);
                     MessageBox.Show(mainHero.dealedDamagePrint());
 
                 }
@@ -98,11 +100,33 @@ namespace WindowsFormsApp5
                 {
 
                     MessageBox.Show("WIN");
+                    dealdamageSaveToDb(mainHero);
                     MessageBox.Show(mainHero.dealedDamagePrint());
 
                 }
             }
         }
+
+        private void dealdamageSaveToDb(Player mainHero)
+        {
+            string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =postgres; " +
+                 "Password = " + textBoxPass.Text + "; ";
+            Npgsql.NpgsqlConnection conn = new NpgsqlConnection(connect);
+           
+            foreach (var damage  in mainHero.dealedDamage)
+            {
+                conn.Open();
+                string cmd3 = "INSERT INTO dealdamage(gid, damage)" +
+               "VALUES(' " + mainHero.gid + "', "
+               + damage+ "); ";
+
+                NpgsqlCommand comm3 = new NpgsqlCommand(cmd3, conn);
+                var res3 = comm3.ExecuteReader();
+                conn.Close();
+            }
+           
+        }
+
         void init()
         {
             richTextBox1.Text = "";
@@ -158,18 +182,49 @@ namespace WindowsFormsApp5
             string cmdtext = "SELECT table_name  FROM information_schema.tables WHERE table_schema = 'public'   AND table_type = 'BASE TABLE'; ";
             NpgsqlCommand comm = new NpgsqlCommand(cmdtext, conn);
             var res = comm.ExecuteReader();
+            conn.Close();
+            conn.Open();
+            //create table playertable 
+            string cmd2 = "CREATE TABLE IF NOT EXISTS playertable (id serial primary key," +
+                "name varchar(255), gid varchar(255), healpoints int, atack int, mindamage int, "+
+                "maxdamage int)";
+            //
+            NpgsqlCommand comm2 = new NpgsqlCommand(cmd2, conn);
+            var res2 = comm2.ExecuteReader();
+            conn.Close();
+            //insert
+            conn.Open();
+            string cmd3 = "INSERT INTO playertable(name, gid, healpoints, atack,mindamage,maxdamage)" +
+                "VALUES('"+mainHero.name+"',  '"+mainHero.gid+"', "
+                + mainHero.HealPoints+","
+                +  mainHero.Atack+","
+                + mainHero.minDamage + ","
+                + mainHero.maxDamage + "); ";
+
+            NpgsqlCommand comm3 = new NpgsqlCommand(cmd3, conn);
+            var res3 = comm3.ExecuteReader();
+            conn.Close();
+            conn.Open();
+            //deal damage
+            //create table dealdamage 
+            string cmd4 = "CREATE TABLE IF NOT EXISTS dealdamage (id serial primary key," +
+                "gid varchar(255), damage int)";
+            NpgsqlCommand comm4 = new NpgsqlCommand(cmd4, conn);
+            var res4 = comm4.ExecuteReader();
+            conn.Close();
             //save player to base
             //1 - create table manually
             //2 - use npgsql EntityFramework
-            using (var context = new PlayerContext() )
-            {
-                
-                var result = context.Players.Add(mainHero);
-                context.Players.Add(monsterl);
-                context.SaveChanges();
-                //Console.WriteLine($"We have {cars.Length} car(s).");
-            }
-            conn.Close();
+            //using (var context = new PlayerContext() )
+            //{
+            //    //
+            //    var result = context.Players.Add(mainHero);
+            //    context.Players.Add(monsterl);
+            //    //playertable error
+            //    context.SaveChanges();
+            //    //Console.WriteLine($"We have {cars.Length} car(s).");
+            //}
+
         }
 
     }

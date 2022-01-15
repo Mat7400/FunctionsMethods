@@ -36,6 +36,8 @@ namespace WindowsFormsApp5
         }
         public Player()
         {
+            
+            gid = Guid.NewGuid().ToString();
             Random rondom = new Random();
             minDamage = rondom.Next(1,5);
             maxDamage = rondom.Next(8, 12);
@@ -57,7 +59,7 @@ namespace WindowsFormsApp5
         [Column("name")]
         public string name = "knight" ;
         [Key]
-        public int id { get; set; }
+        public string gid { get; set; }
         //
         // Этот делегат работает в сочетании с событиями Player.
         // EventArgs - специальный классс от микрософт для работы с событиями
