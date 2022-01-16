@@ -9,6 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Npgsql;
+using System.Data;
+using System.Data.Common;
+
 namespace WindowsFormsApp5
 {
     public partial class Form1 : Form
@@ -227,5 +230,29 @@ namespace WindowsFormsApp5
 
         }
 
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //select join
+            string connect = " Server = localhost; Port = 5432; Database = dotnet; User ID =postgres; " +
+                "Password = " + textBoxPass.Text + "; ";
+            Npgsql.NpgsqlConnection conn = new NpgsqlConnection(connect);
+            conn.Open();
+            string guid = "843019d7-d38f-4572-8a39-cc3e980e0002";
+            string cmdtext = "SELECT playertable.gid, playertable.name, dealdamage.damage"+
+                " FROM playertable LEFT JOIN dealdamage " +
+                "ON dealdamage.gid=playertable.gid WHERE playertable.gid='" + guid+"' ;";
+            NpgsqlCommand comm = new NpgsqlCommand(cmdtext, conn);
+            var res = comm.ExecuteReader();
+             
+            foreach (var result in res)
+            {
+                //((System.Data.Common.DataRecordInternal)result)._values
+                MessageBox.Show(result.ToString());
+            }
+            conn.Close();
+            conn.Open();
+            var res2 = comm.ExecuteScalar();
+            conn.Close();
+        }
     }
 }
